@@ -12,7 +12,6 @@ module.exports = {
    },
    list:(req,res)=>{ //no usamos req
       mysql.query('select * from product',(err,rows)=>{
-         console.log(fields) 
          if (!err)
             res.json(rows);
          else
