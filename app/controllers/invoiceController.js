@@ -1,35 +1,37 @@
-let mysql=require('../../db/mysql');
-let invoice=require('../models/invoice');
+let mysql=require('../../db/mysql')
+let invoice=require('../models/invoice')
 module.exports = {
    create:(req,res)=>{
-      //{date, total, amount, products[id_product, quantity, cost]}
-      console.log(req.body);
-      console.log(req.body.productos);
-      console.log(req.body.productos[2].nombre);
-      //console.log(JSON.parse(req.body));
-      //JSON.parse(req.body.products).forEach(element => {
-      res.json({texto:'mensaje'});
-      /*mysql.query('insert into order SET ?',req.body,(err,rows,fields)=>{
+      console.log(req.body.client_id)
+      mysql.query('select * from client where id = ?',req.body.client_id,(err, rows, fields) => {
          if(!err)
-            res.json(rows);
+           if (rows.length == 1)
+               mysql.query('insert into invoice SET ?',req.body,(err,rows,fields)=>{
+                  if(!err)
+                     res.json(rows)
+                  else
+                     res.json(err)
+               })
+            else 
+               res.json('El cliente no existe')
          else
-            res.json(err);
-      })*/
+            res.json(err)
+      })
    },
    list:(req,res)=>{
-      mysql.query('select * from order',(err,rows,fields)=>{
+      mysql.query('select * from invoice',(err,rows,fields)=>{
          if (!err)
-            res.json(rows);
+            res.json(rows)
          else
-            res.json(err);
+            res.json(err)
       })
    },
    find:(req,res)=>{
-      mysql.query('select * from order o inner join order_details d on o.id=d.order_id where o.id=?',req.params.id,(err,rows,fields)=>{
+      mysql.query('select * from invoice as i inner join invoice_detail as ind on i.id = ind.invoice_id where i.id=?',req.params.id,(err,rows,fields)=>{
          if (!err)
-            res.json(rows);
+            res.json(rows)
          else
-            res.json(err);
+            res.json(err)
       })
    }
 }
