@@ -3,8 +3,8 @@ let invoice_details=require('../models/invoice_details')
 module.exports = {
    create:(req,res)=>{
       console.log(req.body)
-      let resultI = this._validarInvoice(req.body.invoice_id)
-      let resultP = this._validarProduct(req.body.product_id)
+      let resultI = module.exports._validarInvoice(req.body.invoice_id)
+      let resultP = module.exports._validarProduct(req.body.product_id)
 
       if (resultI && resultP)
          mysql.query('insert into invoice_details SET ?',req.body,(err,rows,fields)=>{
@@ -16,6 +16,7 @@ module.exports = {
       else 
          res.json('Parametros incorrectos')
    },
+   
    list:(req,res)=>{
       mysql.query('select * from invoice_details',(err,rows,fields)=>{
          if (!err)
