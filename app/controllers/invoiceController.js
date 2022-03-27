@@ -1,21 +1,26 @@
+const { json } = require('body-parser');
 let mysql=require('../../db/mysql')
 let invoice=require('../models/invoice')
 module.exports = {
 
    create:(req,res)=>{
 
-      console.log(req.body.client_id)
+      console.log(req.body)
+      let p = req.body.products; 
+     
+      console.log(p);
       let resultC = module.exports._validarCliente(req.body.client_id)
 
-      if (resultC)
-         mysql.query('select * from client where id = ?',req.body.client_id,(err, rows, fields) => {
+      //if (resultC)
+         mysql.query("insert into invoice(date, payment, tax, client_id) values('2022/03/22', 200, 0, 1) ",(err, rows, fields) => {
+
             if (!err)
                res.json(rows)
             else
                res.json(err)
          })
-      else 
-         res.json('El cliente no existe')
+      //else 
+        // res.json('El cliente no existe')
 
    },
    list:(req,res)=>{
