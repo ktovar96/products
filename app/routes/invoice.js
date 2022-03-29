@@ -4,6 +4,10 @@ router.get('/', function(req, res) {
   
     invoiceController.list(req,res);
 })
+router.get('/search/:product_id', function(req, res) {
+  
+    invoiceController.searchProduct(req,res);
+})
 router.get('/:id', function(req, res) {
   
     invoiceController.find(req,res);

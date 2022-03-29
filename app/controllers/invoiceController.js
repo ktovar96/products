@@ -6,18 +6,54 @@ module.exports = {
    create:(req,res)=>{
 
       console.log(req.body)
-      let p = req.body.products; 
-     
-      console.log(p);
-      let resultC = module.exports._validarCliente(req.body.client_id)
+      let product = req.body.products; 
+      let client_id = req.body.client_id;
+      let date = req.body.date;
+      let payment = req.body.payment;
+      let tax = req.body.tax;  
+     // let cad = "insert into invoice_detail(product_id) values";
+      //let resultC = module.exports._validarCliente(req.body.client_id);
+
+      
 
       //if (resultC)
-         mysql.query("insert into invoice(date, payment, tax, client_id) values('2022/03/22', 200, 0, 1) ",(err, rows, fields) => {
+      console.log("AQUI")
+      console.log(req.body);
+         mysql.query("insert into invoice(date, payment, tax, client_id) values(?, ?, ?, ?)", [date, payment, tax, client_id],(err, rows, fields) => {
+            if (!err){
+               let cad = "insert into invoice_detail(invoice_id, product_id, quantity, cost) values";
+               /*
+                  insert into invoice_detail(invoice_id, product_id, quantity, cost) valules
+                  (5,2,1,100),
+                  (5,5,1,100);
 
-            if (!err)
-               res.json(rows)
-            else
+               */
+               let prods=req.body.productos;
+               console.log(prods);
+               console.log(rows);
+
+               for (let i = 0; i < prods.length; i++) {
+                  console.log(i);
+                  if (i == prods.length - 1){
+                     cad += "(" + rows.insertId + "," + prods[i].id + "," + prods[i].quantity + "," + prods[i].cost + ");";
+                     console.log("oli")
+                     console.log(cad);
+                  } else{
+                     cad += "(" + rows.insertId + "," + prods[i].id + "," + prods[i].quantity + "," + prods[i].cost + "),";
+                     console.log(cad)
+                  }
+               }
+              
+               mysql.query(cad, (err, rows, fields) => {
+                  if (!err){
+                     res.json(rows);
+                  } else {
+                     res.json(err);
+                  }
+               });
+            }else{
                res.json(err)
+            }
          })
       //else 
         // res.json('El cliente no existe')

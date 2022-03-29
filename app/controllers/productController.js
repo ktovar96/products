@@ -5,13 +5,13 @@ module.exports = {
       console.log(req.body);
       mysql.query('insert into product SET ?',req.body,(err,rows,fields)=>{
          if(!err)
-            res.json(rows);
+            res.json({tipo:1,message:'registro insertado correctamente'});
          else
             res.json(err);
       })
    },
    list:(req,res)=>{ //no usamos req
-      mysql.query('select * from product',(err,rows)=>{
+      mysql.query('select * from product',(err,rows,fields)=>{
          if (!err)
             res.json(rows);
          else

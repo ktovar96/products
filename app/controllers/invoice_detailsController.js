@@ -41,12 +41,12 @@ module.exports = {
             res.json(err)
       })
    },
-   search:(req,res)=>{ //para saber en que ventas se ha vendido el producto
+   searchProduct:(req,res)=>{ //para saber en que ventas se ha vendido el producto
       mysql.query('Select * \
          from invoice as i \
          inner join invoice_detail as ind on i.id = ind.invoice_id \
          inner join product as p on p.id = ind.product_id and ind.product_id=?',
-         req.params.id,(err,rows,fields)=>{
+         req.params.product_id,(err,rows,fields)=>{
          if (!err)
             res.json(rows)
          else

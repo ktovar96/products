@@ -13,3 +13,5 @@ router.get('/', function (req, res) {
 })
 //localhost:1339/api
 module.exports = router
+
+//localhost:1339/api/invoice/search/5
