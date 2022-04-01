@@ -1,20 +1,18 @@
 const { json } = require('body-parser');
-let mysql=require('../../db/mysql')
-let invoice=require('../models/invoice')
+let mysql=require('../../db/mysql');
+let invoice_details = require('../models/invoice_details');
+let invoice = require('../models/invoice');
 module.exports = {
 
    create:(req,res)=>{
 
-      console.log(req.body)
-      let product = req.body.products; 
+      console.log(req.body);
       let client_id = req.body.client_id;
       let date = req.body.date;
       let payment = req.body.payment;
       let tax = req.body.tax;  
      // let cad = "insert into invoice_detail(product_id) values";
       //let resultC = module.exports._validarCliente(req.body.client_id);
-
-      
 
       //if (resultC)
       console.log("AQUI")
@@ -59,14 +57,16 @@ module.exports = {
         // res.json('El cliente no existe')
 
    },
+
    list:(req,res)=>{
-      mysql.query('select * from invoice',(err,rows,fields)=>{
+      mysql.query('select * from invoice as i inner join invoice_detail as ind on i.id = ind.invoice_id',(err,rows,fields)=>{
          if (!err)
             res.json(rows)
          else
             res.json(err)
       })
    },
+
    find:(req,res)=>{
       mysql.query('select * from invoice as i inner join invoice_detail as ind on i.id = ind.invoice_id where i.id=?',req.params.id,(err,rows,fields)=>{
          if (!err)
@@ -75,6 +75,31 @@ module.exports = {
             res.json(err)
       })
    },
+
+   searchProduct:(req,res)=>{ //para saber en que ventas se ha vendido el producto
+      mysql.query('Select * \
+         from invoice as i \
+         inner join invoice_detail as ind on i.id = ind.invoice_id \
+         inner join product as p on p.id = ind.product_id and ind.product_id=?',
+         req.params.product_id,(err,rows,fields)=>{
+         if (!err)
+            res.json(rows)
+         else
+            res.json(err)
+      })
+   },
+
+   serachClient:(req, res) => {
+      mysql.query('Select * from invoice as i\
+      inner join invoice_detail as ind on i.id = ind.invoice_id \
+      inner join client as c on c.id = i.client_id and i.client_id', req.params.client_id, (err,rows,fields) =>{
+         if (!err)
+            res.json(res);
+         else 
+            res.json(err);
+      })
+   },
+   
    
    _validarCliente: (client_id) => {
       mysql.query('select * from client where id =?', client_id, (err,rows,fields) => {
