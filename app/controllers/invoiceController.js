@@ -92,7 +92,7 @@ module.exports = {
    serachClient:(req, res) => {
       mysql.query('Select * from invoice as i\
       inner join invoice_detail as ind on i.id = ind.invoice_id \
-      inner join client as c on c.id = i.client_id and i.client_id', req.params.client_id, (err,rows,fields) =>{
+      inner join client as c on c.id = i.client_id and i.client_id =?', req.params.client_id, (err,rows,fields) =>{
          if (!err)
             res.json(res);
          else 
