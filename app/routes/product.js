@@ -18,7 +18,7 @@ router.post('/', userMiddleware.isLoggedIn, function(req, res) {
   //res.json({ message: 'Vas a añadir un cliente' })
   productController.create(req,res);
 })
-router.put('/:id', user.userMiddleware.isLoggedIn,  function(req, res) {
+router.put('/:id', userMiddleware.isLoggedIn,  function(req, res) {
   //res.json({ message: 'Vas a actualizar el cliente con id ' + req.params.id })
   productController.edit(req,res);
 })
