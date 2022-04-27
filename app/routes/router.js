@@ -5,7 +5,7 @@ const bcrypt = require ('bcryptjs');
 const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
 
-const db = require('../'); //aqui que onda?
+const db = require('../../db/mysql.js'); 
 const userMiddleware = require('../middleware/users.js');
 const { validateRegister } = require('../middleware/users.js');
 const { route } = require('./invoice');
@@ -110,4 +110,11 @@ router.post('/login', (req, res, next) => {
     );
 });
 
-router.get('/secret')
+router.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
+    console.log(req.userData);
+    res.send('This is the secret conten. Only Logged in users can see that!');
+});
+router.get('/', (req, res) =>{
+    res.json({messege: "Bienvenido a la API"})
+});
+module.exports = router;
